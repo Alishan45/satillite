@@ -1,0 +1,3 @@
+timestamp,file,stage,step,error
+2026-10-18T09:21:30.116590,20240105_2330_0009,create_pair,temporal_match,Time diff 30.0 min > 30 min
+2026-10-18T09:21:34.060328,20240105_2330_0019,create_pair,temporal_match,Time diff 30.0 min > 30 min
