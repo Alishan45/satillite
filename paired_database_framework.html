@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FY-4A + NWP Paired Sample Database Framework</title>
+<style>
+  @page {
+    size: A4;
+    margin: 12mm 14mm 12mm 14mm;
+    @bottom-right {
+      content: 'Page ' counter(page) ' of ' counter(pages);
+      font-size: 8pt;
+      color: #94a3b8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+  }
+  
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.4;
+    font-size: 9pt;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+  
+  .doc-badge {
+    display: inline-block;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    font-weight: 700;
+    font-size: 7.5pt;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #bfdbfe;
+  }
+  
+  .date-badge {
+    font-size: 8pt;
+    color: #64748b;
+    font-weight: 500;
+  }
+  
+  h1 {
+    font-size: 15pt;
+    color: #0f172a;
+    margin: 2px 0 4px 0;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  
+  .meta-bar {
+    font-size: 8pt;
+    color: #475569;
+    display: flex;
+    gap: 16px;
+  }
+  
+  .task-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3.5px solid #2563eb;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 8.5pt;
+    color: #334155;
+    line-height: 1.35;
+  }
+  
+  .task-box strong {
+    color: #1e3a8a;
+  }
+  
+  .qa-block {
+    margin-bottom: 10px;
+  }
+  
+  .question-header {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-left: 3.5px solid #1e40af;
+    padding: 5px 9px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  
+  .question-title {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+  
+  .answer-body {
+    padding: 0 2px;
+    font-size: 8.8pt;
+    color: #1e293b;
+    text-align: justify;
+  }
+  
+  .answer-body p {
+    margin: 0 0 5px 0;
+  }
+  
+  .answer-body p:last-child {
+    margin-bottom: 0;
+  }
+  
+  ul {
+    margin: 2px 0 5px 14px;
+    padding: 0;
+  }
+  
+  li {
+    margin-bottom: 2.5px;
+    line-height: 1.35;
+  }
+  
+  .highlight-tag {
+    background: #f0f9ff;
+    color: #0284c7;
+    font-weight: 600;
+    font-size: 8pt;
+    padding: 0.5px 4px;
+    border-radius: 3px;
+    border: 1px solid #bae6fd;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 8px 0;
+    font-size: 8pt;
+    page-break-inside: avoid;
+  }
+  
+  th, td {
+    padding: 4px 6px;
+    text-align: left;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+    line-height: 1.3;
+  }
+  
+  th {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 8pt;
+  }
+  
+  tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+  
+  .prototype-badge {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #14532d;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-top: 6px;
+    font-size: 8.5pt;
+    line-height: 1.35;
+    page-break-inside: avoid;
+  }
+  
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="doc-badge">Technical Brief &amp; Implementation Framework</div>
+    <div class="date-badge">Satellite Data Assimilation Research</div>
+  </div>
+  <h1>FY-4A + NWP Paired Sample Database</h1>
+  <div class="meta-bar">
+    <span><strong>Target Region:</strong> East China (20°–45°N, 100°–135°E)</span>
+    <span><strong>Observation:</strong> FY-4A AGRI L1 Radiance</span>
+    <span><strong>Background:</strong> ERA5 Reanalysis</span>
+  </div>
+</header>
+
+<div class="task-box">
+  <strong>The Task:</strong> Build a paired sample database in which each sample links a numerical model state to a FY-4A satellite image, to be used for studying how information in satellite imagery can be assimilated into a numerical weather prediction model.
+</div>
+
+<!-- QUESTION 1 -->
+<div class="qa-block">
+  <div class="question-header">
+    <div class="question-title">1. What would you pair with what? Why those two things?</div>
+  </div>
+  <div class="answer-body">
+    <p>
+      I would pair <strong>top-of-atmosphere (TOA) brightness temperatures from FY-4A AGRI infrared (IR) and water vapor channels</strong> with the <strong>3D thermodynamic, kinematic, and hydrometeor state of the NWP model</strong> across standard pressure levels (1000 to 250 hPa), supplemented by key 2D surface parameters.
+    </p>
+    <p>
+      <strong>Satellite Observations:</strong>
+    </p>
+    <ul>
+      <li><span class="highlight-tag">Channel 9 (6.25 µm)</span>: High-sensitivity absorption channel sensing upper-to-mid tropospheric water vapor.</li>
+      <li><span class="highlight-tag">Channel 10 (7.1 µm)</span>: Mid-to-lower tropospheric moisture; paired with C09 as a differential index (<span class="highlight-tag">C09 - C10</span>), it retrieves vertical moisture lapse rates.</li>
+      <li><span class="highlight-tag">Window Channels C12 (10.7 µm) &amp; C13 (12.0 µm)</span>: Clean and split-window channels for cloud-top and skin temperature; the split difference (<span class="highlight-tag">C12 - C13</span>) diagnoses boundary-layer moisture, aerosols, and cloud optical depth.</li>
+      <li><span class="highlight-tag">CO₂ Slicing (C14, 13.5 µm)</span>: Resolves vertical atmospheric transmission for accurate Cloud Top Height (CTH) and semi-transparent cirrus detection.</li>
+      <li><span class="highlight-tag">Temporal Radiance Tendency (ΔT_b / 15 min)</span>: Differencing consecutive 15-minute scans captures rapid cloud-top cooling (&lt; -10 K / 15 min), the signature of convective storm initiation.</li>
+      <li><span class="highlight-tag">Viewing &amp; Solar Geometry</span>: Satellite zenith/azimuth angles (airmass optical path length) and solar zenith angle.</li>
+    </ul>
+    <p>
+      <strong>NWP Model State:</strong> In addition to thermodynamic variables (<span class="highlight-tag">T, q, u, v, z</span>), modern all-sky assimilation requires <strong>cloud microphysics</strong>:
+    </p>
+    <ul>
+      <li>Cloud Liquid Water (<span class="highlight-tag">q_l</span>) &amp; Cloud Ice Water (<span class="highlight-tag">q_i</span>) per pressure level (kg/kg).</li>
+      <li>Rain and Snow Water Content (<span class="highlight-tag">q_r, q_s</span>) and Fractional Cloud Cover (<span class="highlight-tag">cc</span>).</li>
+      <li>Column integrals and surface conditions: Surface Pressure (<span class="highlight-tag">P_s</span>), 2m Temperature (<span class="highlight-tag">T_2m</span>), Skin Temperature (<span class="highlight-tag">T_skin</span>), Total Column Water Vapor (TCWV), Total Column Cloud Liquid (TCLW), Land-Sea Mask (<span class="highlight-tag">lsm</span>), and Surface Orography (DEM).</li>
+    </ul>
+    <p>
+      <strong>Why Pair These Variables:</strong> In physical data assimilation, observed radiances are non-linear vertical integrals of temperature, moisture, and hydrometeor profiles governed by Radiative Transfer Models (RTM). Pairing multi-spectral IR/WV radiances directly targets the prognostic state variables updated by variational (3D/4D-Var) or ensemble Kalman filter schemes. Furthermore, IR/WV channels operate continuously 24/7 independent of daylight. Including cloud hydrometeors transitions the database from restrictive clear-sky assumptions to full all-sky assimilation, allowing AI models to learn direct mappings from satellite radiances to cloud water and precipitation.
+    </p>
+  </div>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="qa-block">
+  <div class="question-header">
+    <div class="question-title">2. How would you decide that a pair is correctly matched? What criterion would you use, and how large an error would you consider acceptable?</div>
+  </div>
+  <div class="answer-body">
+    <p>
+      A pair is declared valid if and only if it satisfies three rigorous criteria across time, space, and physical integrity:
+    </p>
+    <ul>
+      <li>
+        <strong>Temporal Matching:</strong> The FY-4A scan timestamp must align with the NWP model validity time within <strong>≤ 15 minutes</strong> (hard ceiling <strong>&lt; 30 minutes</strong>). Because convective clouds, frontal moisture boundaries, and vertical updrafts evolve on sub-hourly timescales, larger discrepancies produce unphysical representativeness error. Matching 5–15 minute satellite scans to hourly NWP fields yields an expected average offset of <strong>~11–15 minutes</strong> (11.85 min achieved in our prototype), refinable via First Guess at Appropriate Time (FGAT) or 4D temporal interpolation.
+      </li>
+      <li>
+        <strong>Spatial Registration &amp; Resolution Alignment:</strong> The native FY-4A geostationary projection (~4 km nadir) is regridded to the NWP regular lat-lon grid (<strong>0.25° × 0.25° ≈ 28 km</strong>) using area-weighted spatial aggregation. The acceptable spatial registration error is <strong>&lt; 0.125° (&lt; 14 km)</strong>—half a model grid cell.
+      </li>
+      <li>
+        <strong>Physical Bounds &amp; Quality Control:</strong> Samples are rejected if missing/corrupted pixels exceed <strong>5%</strong> within the analysis domain, or if calibrated brightness temperatures fall outside the physical atmospheric window of <strong>[170 K, 340 K]</strong>. NWP missing data must not exceed <strong>5%</strong>.
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- QUESTION 3 -->
+<div class="qa-block">
+  <div class="question-header">
+    <div class="question-title">3. What would a single record in this database contain? List the fields you would define.</div>
+  </div>
+  <div class="answer-body">
+    <p>
+      Each database record is encapsulated in a CF-compliant NetCDF4 or Zarr chunked file (e.g. <code>[sample_id].nc</code>), partitioned into four coordinated groups:
+    </p>
+    
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 22%;">Data Group</th>
+          <th style="width: 38%;">Fields &amp; Defined Parameters</th>
+          <th style="width: 20%;">Dimensions</th>
+          <th style="width: 20%;">Units / Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Metadata &amp; Coordinates</strong></td>
+          <td>
+            <code>sample_id</code>, <code>obs_time_utc</code>, <code>model_time_utc</code>, <code>time_diff_minutes</code> (Δt),<br>
+            <code>latitude</code> (20.0° to 45.0°N),<br>
+            <code>longitude</code> (100.0° to 135.0°E)
+          </td>
+          <td>
+            Scalar / 1D<br>
+            [101]<br>
+            [141]
+          </td>
+          <td>
+            ISO8601 UTC<br>
+            Minutes<br>
+            0.25° Common Grid
+          </td>
+        </tr>
+        <tr>
+          <td><strong>2. Observation State (y)</strong></td>
+          <td>
+            Calibrated Brightness Temp (<span class="highlight-tag">C09, C10, C12, C13, C14</span>),<br>
+            Spectral Differences (<span class="highlight-tag">C12 - C13</span>, <span class="highlight-tag">C09 - C10</span>),<br>
+            Temporal Radiance Tendency (ΔT_b / 15 min),<br>
+            Satellite Viewing Angles (Zenith θ_sat, Azimuth ϕ_sat),<br>
+            Solar Zenith Angle (θ_sol), Pixel Quality Flags
+          </td>
+          <td>
+            [101 × 141 × 5]<br>
+            [101 × 141 × 2]<br>
+            [101 × 141 × 3]<br>
+            [101 × 141 × 2]<br>
+            [101 × 141]
+          </td>
+          <td>
+            Kelvin (K)<br>
+            Kelvin (K)<br>
+            K / 15 min<br>
+            Degrees (°)<br>
+            Quality bitmask
+          </td>
+        </tr>
+        <tr>
+          <td><strong>3. Model Background (x)</strong></td>
+          <td>
+            3D Thermodynamic &amp; Kinematic Fields:<br>
+            - Temperature (<code>T</code>), Specific Humidity (<code>q</code>)<br>
+            - Horizontal Winds (<code>u, v</code>), Geopotential (<code>z</code>)<br>
+            3D Cloud Microphysics (All-Sky):<br>
+            - Cloud Liquid (<code>q_l</code>), Cloud Ice (<code>q_i</code>)<br>
+            - Rain/Snow Water (<code>q_r, q_s</code>), Cloud Fraction (<code>cc</code>)<br>
+            2D Surface &amp; Column Fields:<br>
+            - <code>P_s</code>, <code>T_2m</code>, <code>T_skin</code>, <code>TCWV</code>, <code>TCLW</code>, DEM, LSM
+          </td>
+          <td>
+            7 levels × [101 × 141]<br>
+            (1000, 925, 850, 700,<br>
+            500, 300, 250 hPa)<br><br>
+            7 levels × [101 × 141]<br><br>
+            [101 × 141]
+          </td>
+          <td>
+            K, kg/kg<br>
+            m/s, m²/s²<br><br>
+            kg/kg<br>
+            kg/kg, 0–1<br><br>
+            Pa, K, K, kg/m², m, 0–1
+          </td>
+        </tr>
+        <tr>
+          <td><strong>4. QC &amp; Partitioning</strong></td>
+          <td>
+            <code>missing_fraction_sat</code>, <code>missing_fraction_nwp</code>,<br>
+            <code>overall_valid</code> (Boolean),<br>
+            <code>split_partition</code> (train / val / test)
+          </td>
+          <td>
+            Scalar<br>
+            Scalar<br>
+            Categorical
+          </td>
+          <td>
+            Percentage (0.0–1.0)<br>
+            True / False<br>
+            Chronological Split
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- QUESTION 4 -->
+<div class="qa-block">
+  <div class="question-header">
+    <div class="question-title">4. In your view, which step of this task is the hardest, and why?</div>
+  </div>
+  <div class="answer-body">
+    <p>
+      In my view, the hardest step is <strong>reconciling spatial representativeness and cloud parallax displacement</strong> when linking geostationary satellite radiances to grid-averaged NWP model columns.
+    </p>
+    <p>
+      <strong>1. The Parallax Geometry Problem:</strong> Because FY-4A is stationed at 104.7°E above the equator, line-of-sight paths intersect mid-latitude domains (East China, 20°–45°N) at oblique zenith angles of 40°–60°. High convective cloud towers reaching 12–16 km altitude are displaced laterally on the projection plane by <strong>15 to 40 km</strong> away from their true ground nadir position. If uncorrected, cold cloud-top radiances map to the wrong vertical atmospheric column in the NWP state, injecting artificial dipole innovation errors into the assimilation system.
+    </p>
+    <p>
+      <strong>2. Non-Linear Multi-Scale Representativeness:</strong> Satellite infrared radiometers sample continuous sub-grid cloud heterogeneity at ~4 km, whereas NWP models represent discrete volumetric averages at ~28 km (0.25°). Radiative transfer through a partly cloudy grid cell is fundamentally non-linear: the average brightness temperature does not equal the radiative transfer of the average atmospheric state (<i>E[RTM(x)] &ne; RTM(E[x])</i>). Aggregating satellite radiances to the model grid without smoothing out sharp localized physical gradients (such as convective cores and drylines) is the primary physical and computational bottleneck.
+    </p>
+    
+    <div class="prototype-badge">
+      <strong>Prototype Pipeline Validation:</strong> To test this framework in practice, I built a modular Python pipeline and validated it on real FY-4A AGRI Level-1 HDF observations and matching ERA5 atmospheric states over East China (20°–45°N, 100°–135°E). The pipeline successfully calibrated raw counts using instrument Look-Up Tables, performed geostationary inverse coordinate remapping, and generated a clean dataset of <strong>17 paired samples</strong> (100% valid, 0.0% missing data in domain, mean Δt = 11.85 min) partitioned chronologically into training, validation, and test sets.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
