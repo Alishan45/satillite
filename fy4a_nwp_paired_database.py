@@ -92,10 +92,71 @@ CONFIG = {
     # Tighten to 15 min for operational NWP applications.
     "max_time_difference_minutes": 30,
 
-    # --- FY-4A channels ---
+# =============================================================================
+# FY-4A vs FY-4B AGRI WAVELENGTH-KEYED CHANNEL MAPPING
+# =============================================================================
+# FY-4A: 14 channels, sub-satellite point 104.7°E (archive reference)
+# FY-4B: 15 channels, sub-satellite point 105.0°E (current operational platform)
+# FY-4B introduces an extra mid-lower WV band (7.42 µm), which shifts subsequent channel indices.
+# Keying by physical wavelength ensures cross-satellite compatibility.
+AGRI_WAVELENGTH_CHANNEL_MAP = {
+    "WV_6.25": {
+        "wavelength_um": 6.25,
+        "FY4A": "C09",
+        "FY4B": "C09",
+        "name": "Upper-tropospheric water vapor",
+    },
+    "WV_7.0": {
+        "wavelength_um": 7.00,
+        "FY4A": "C10",  # 7.1 µm on 4A
+        "FY4B": "C10",  # 7.0 µm on 4B
+        "name": "Mid-tropospheric water vapor",
+    },
+    "WV_7.4": {
+        "wavelength_um": 7.42,
+        "FY4A": None,   # Not present on FY-4A
+        "FY4B": "C11",  # Added on FY-4B
+        "name": "Mid-lower tropospheric water vapor",
+    },
+    "IR_8.5": {
+        "wavelength_um": 8.50,
+        "FY4A": "C11",
+        "FY4B": "C12",
+        "name": "Cloud phase / SO2 / surface",
+    },
+    "IR_10.8": {
+        "wavelength_um": 10.8,
+        "FY4A": "C12",  # 10.7 µm on 4A
+        "FY4B": "C13",  # 10.8 µm on 4B
+        "name": "Clean infrared window",
+    },
+    "IR_12.0": {
+        "wavelength_um": 12.0,
+        "FY4A": "C13",
+        "FY4B": "C14",
+        "name": "Dirty / split-window",
+    },
+    "CO2_13.5": {
+        "wavelength_um": 13.5,
+        "FY4A": "C14",
+        "FY4B": "C15",
+        "name": "CO2 slicing (cloud-top pressure)",
+    },
+}
+
+def resolve_satellite_channel(satellite: str, band_key: str) -> str:
+    """Return channel code (e.g. 'C09') for a given satellite and physical band."""
+    sat = satellite.upper().replace("-", "").replace("_", "")
+    key = "FY4B" if "4B" in sat else "FY4A"
+    mapping = AGRI_WAVELENGTH_CHANNEL_MAP.get(band_key)
+    if not mapping or not mapping[key]:
+        raise ValueError(f"Band '{band_key}' not available on satellite {satellite}")
+    return mapping[key]
+
+    # --- FY-4A/B channels (Wavelength-keyed) ---
     # C09: 6.25 um Water Vapour   -- mid-upper troposphere moisture
-    # C12: 10.7 um IR window      -- surface/cloud-top temperature
-    # C13: 12.0 um IR split-window -- cloud/SST retrieval pair
+    # C12: 10.7 um IR window      -- surface/cloud-top temperature (C13 on FY-4B)
+    # C13: 12.0 um IR split-window -- cloud/SST retrieval pair (C14 on FY-4B)
     # All are IR (day + night operation).
     "satellite_channels": ["C09", "C12", "C13"],
 
