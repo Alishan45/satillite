@@ -21,3 +21,8 @@ venv/
 Thumbs.db
 .vscode/
 .idea/
+
+# Large raw satellite data files (>100MB exceed GitHub push limit)
+*.HDF
+*.hdf
+data/raw/fy4b/

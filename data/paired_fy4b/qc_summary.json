@@ -1,0 +1,33 @@
+{
+  "project": "FY-4B AGRI L1 FDI to NWP Paired Dataset",
+  "execution_time_utc": "2026-10-26 17:41:24",
+  "target_date": "2026-10-25",
+  "discovered_files": 4,
+  "processed_samples": 4,
+  "accepted_samples": 4,
+  "rejected_samples": 0,
+  "mean_delta_t_minutes": 15.0,
+  "spatial_grid": {
+    "n_lat": 101,
+    "n_lon": 141,
+    "lat_range": [
+      20.0,
+      45.0
+    ],
+    "lon_range": [
+      100.0,
+      135.0
+    ],
+    "resolution_deg": 0.25
+  },
+  "channels_processed": [
+    "WV_UPPER",
+    "WV_MID",
+    "WV_LOWER",
+    "IR_CLEAN_WINDOW",
+    "IR_SPLIT_WINDOW",
+    "CO2_SLICING"
+  ],
+  "nwp_source": "NOAA NCEP Operational Global Forecast System (GFS) 0.25 Degree",
+  "output_directory": "/home/alishan45/Desktop/satillite/data/paired_fy4b"
+}
